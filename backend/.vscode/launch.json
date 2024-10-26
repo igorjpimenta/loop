@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+      {
+        "name": "Launch blink Application",
+        "configurations": ["Start Docker", "Launch Server", "Launch App"]
+      }
+    ],
+    "configurations": [
+        {
+          "name": "Start Docker",
+          "type": "node",
+          "request": "launch",
+          "cwd": "${workspaceFolder}/..",
+          "console": "internalConsole",
+          "runtimeExecutable": "bash",
+          "runtimeArgs": ["-c", "docker-compose --env-file .env up -d"],
+          "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Launch Server",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "runserver"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+          "name": "Launch App",
+          "type": "node",
+          "request": "launch",
+          "cwd": "${workspaceFolder}/../frontend",
+          "console": "integratedTerminal",
+          "runtimeExecutable": "npm",
+          "runtimeArgs": ["run", "dev"],
+          "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
