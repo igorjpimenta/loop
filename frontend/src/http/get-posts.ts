@@ -1,4 +1,6 @@
 import { API_URL } from '../lib/config'
+import type { SnakeizeKeys } from '../types/case'
+import { camelizeObject } from '../utils'
 import type { Topic } from './get-topics'
 
 import axios from 'axios'
@@ -13,8 +15,11 @@ export interface Post {
   updatedAt: string
 }
 
-export async function getPosts(): Promise<Post[]> {
-  const { data } = await axios.get<Post[]>(`${API_URL}/api/posts/`)
+type GetPostsResponse = SnakeizeKeys<Post>[]
 
-  return data
+export async function getPosts(): Promise<Post[]> {
+  const { data } = await axios.get<GetPostsResponse>(`${API_URL}/api/posts/`)
+  const posts = data.map(camelizeObject)
+
+  return posts
 }
