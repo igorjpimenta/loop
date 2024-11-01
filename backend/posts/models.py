@@ -39,3 +39,9 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
         db_table = 'posts'
+
+    def delete(self, *args, **kwargs):
+        if self.image:
+            self.image.delete(save=False)
+
+        super().delete(*args, **kwargs)

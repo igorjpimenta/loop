@@ -1,10 +1,14 @@
 import { API_URL } from '../lib/config'
-import type { CreatePostFormData } from '../pages/feed/forms/create-post'
+import type { CreatePostFormData } from '../pages/feed/sections/create-post-form'
+import type { SnakeizeKeys } from '../types/case'
+import { camelizeObject } from '../utils'
 import type { Post } from './get-posts'
 
 import axios from 'axios'
 
 export async function createPost(formData: CreatePostFormData): Promise<Post> {
+  type CreatePostResponse = SnakeizeKeys<Post>
+
   const body = new FormData()
 
   body.append('username', 'sarah_dev')
@@ -18,7 +22,7 @@ export async function createPost(formData: CreatePostFormData): Promise<Post> {
     body.append('image', formData.image)
   }
 
-  const { data: response } = await axios.post<Post>(
+  const { data } = await axios.post<CreatePostResponse>(
     `${API_URL}/api/posts/`,
     body,
     {
@@ -28,5 +32,7 @@ export async function createPost(formData: CreatePostFormData): Promise<Post> {
     }
   )
 
-  return response
+  const post = camelizeObject(data)
+
+  return post
 }

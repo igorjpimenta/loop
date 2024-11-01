@@ -20,7 +20,8 @@ export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
         <div className="flex items-center gap-2">
           <Button
             onClick={() => inputRef.current?.click()}
-            variant="icon"
+            variant="secondary"
+            shape="icon"
             icon={ImagePlus}
             disabled={props.disabled}
           />

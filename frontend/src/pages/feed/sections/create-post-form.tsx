@@ -14,7 +14,7 @@ import type { Post } from '../../../http/get-posts'
 import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, SendHorizonal, Plus, Minus, Trash2 } from 'lucide-react'
+import { SendHorizonal, Plus, Minus, Trash2 } from 'lucide-react'
 import { z } from 'zod'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
@@ -39,7 +39,7 @@ export const createPostSchema = z.object({
     .refine(file => file.size <= MAX_FILE_SIZE, 'Max file size is 5MB')
     .refine(
       file => ACCEPTED_IMAGE_TYPES.includes(file.type),
-      'Only .jpg, .jpeg, .png and .webp formats are supported'
+      'Only .jpg, .jpeg, .png and .webp shapes are supported'
     )
     .optional(),
 })
@@ -111,8 +111,9 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
       setIsSubmitting(true)
 
       const newPost = await createPost(data)
-      onPostCreated(newPost)
       reset()
+
+      onPostCreated(newPost)
     } catch (error) {
       console.error('Error creating post:', error)
     } finally {
@@ -169,7 +170,8 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
 
             <Button
               onClick={handleImageDelete}
-              variant="icon"
+              variant="secondary"
+              shape="icon"
               icon={Trash2}
               className="absolute top-1 right-1 enabled:hover:text-red-500"
             />
@@ -240,9 +242,9 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          variant="icon"
-          className="flex items-center gap-2 h-fit"
-          icon={isSubmitting ? Loader2 : SendHorizonal}
+          isLoading={isSubmitting}
+          shape="icon"
+          icon={SendHorizonal}
         />
       </div>
     </form>

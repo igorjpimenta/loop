@@ -1,6 +1,6 @@
 import { getPosts, type Post } from '../../http/get-posts'
 import { Header } from './sections/header'
-import { CreatePost } from './forms/create-post'
+import { CreatePost } from './sections/create-post-form'
 import { PostCard } from './components/post-card'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -21,6 +21,12 @@ export function Feed() {
     ])
   }
 
+  const handlePostDeleted = async (postId: string) => {
+    queryClient.setQueryData(['posts'], (prevPosts: Post[]) =>
+      prevPosts.filter(post => post.id !== postId)
+    )
+  }
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -37,7 +43,13 @@ export function Feed() {
         <CreatePost onPostCreated={handlePostCreated} />
 
         {posts && posts.length > 0 ? (
-          posts.map(post => <PostCard key={post.id} post={post} />)
+          posts.map(post => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={() => handlePostDeleted(post.id)}
+            />
+          ))
         ) : (
           <div>No posts found</div>
         )}
