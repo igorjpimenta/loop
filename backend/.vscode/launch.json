@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "compounds": [
       {
-        "name": "Launch blink Application",
+        "name": "Launch Loop Application",
         "configurations": ["Start Docker", "Launch Server", "Launch App"]
       }
     ],
