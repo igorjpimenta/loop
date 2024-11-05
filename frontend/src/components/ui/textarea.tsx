@@ -1,14 +1,9 @@
 import { mergeRefs } from '../../utils'
 
-import {
-  forwardRef,
-  type TextareaHTMLAttributes,
-  useLayoutEffect,
-  useRef,
-} from 'react'
+import { type ComponentProps, forwardRef, useLayoutEffect, useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>
+type TextareaProps = ComponentProps<'textarea'>
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, forwardedRef) => {

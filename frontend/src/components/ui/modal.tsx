@@ -24,12 +24,15 @@ type ModalOverlayProps = ComponentProps<'div'> &
   DialogPrimitive.DialogOverlayProps
 
 const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
-  ({ ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     return (
       <DialogPrimitive.DialogOverlay
         {...props}
         ref={ref}
-        className="fixed inset-0 bg-black/60 data-[state=open]:animate-overlayShow"
+        className={twMerge(
+          'fixed inset-0 bg-black/60 data-[state=open]:animate-overlayShow',
+          className
+        )}
       />
     )
   }
@@ -37,6 +40,7 @@ const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
 
 export function ModalContent({
   children,
+  className,
   ...props
 }: DialogPrimitive.DialogContentProps) {
   return (
@@ -46,8 +50,10 @@ export function ModalContent({
         {...props}
         onPointerDownOutside={e => e.preventDefault()}
         className={twMerge(
-          'fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[85vh] w-[90vw] max-w-[450px] data-[state=open]:animate-contentShow rounded-xl border border-stone-800 hover:border-stone-700 bg-stone-950 p-6 overflow-y-auto focus:outline-none',
-          props.className
+          'rounded-xl border border-stone-800 hover:border-stone-700 bg-stone-950 p-6 overflow-y-auto focus:outline-none',
+          'fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[85vh] w-[90vw] max-w-[450px]',
+          'data-[state=open]:animate-contentShow',
+          className
         )}
       >
         <ModalClose
@@ -68,19 +74,26 @@ export function ModalContent({
   )
 }
 
-export function ModalTitle(props: DialogPrimitive.DialogTitleProps) {
+export function ModalTitle({
+  className,
+  ...props
+}: DialogPrimitive.DialogTitleProps) {
   return (
-    <DialogPrimitive.DialogTitle {...props} className="text-lg font-semibold" />
+    <DialogPrimitive.DialogTitle
+      {...props}
+      className={twMerge('text-lg font-semibold', className)}
+    />
   )
 }
 
-export function ModalDescription(
-  props: DialogPrimitive.DialogDescriptionProps
-) {
+export function ModalDescription({
+  className,
+  ...props
+}: DialogPrimitive.DialogDescriptionProps) {
   return (
     <DialogPrimitive.DialogDescription
       {...props}
-      className="text-stone-400 text-sm leading-relaxed"
+      className={twMerge('text-stone-400 text-sm leading-relaxed', className)}
     />
   )
 }

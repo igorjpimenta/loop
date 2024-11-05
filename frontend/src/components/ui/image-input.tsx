@@ -1,11 +1,10 @@
 import { Button } from './button'
 import { mergeRefs } from '../../utils'
 
-import { forwardRef, useRef, type InputHTMLAttributes } from 'react'
+import { type ComponentProps, forwardRef, useRef } from 'react'
 import { ImagePlus } from 'lucide-react'
 
-interface ImageInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface ImageInputProps extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (file: File) => void
 }
 

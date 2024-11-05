@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react'
+import type { ComponentProps } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 import { twMerge } from 'tailwind-merge'
 
@@ -23,7 +23,7 @@ const badgeVariants = tv({
 })
 
 interface BadgeProps
-  extends HTMLAttributes<HTMLSpanElement>,
+  extends ComponentProps<'span'>,
     VariantProps<typeof badgeVariants> {
   highlighted?: boolean
   uniform?: boolean

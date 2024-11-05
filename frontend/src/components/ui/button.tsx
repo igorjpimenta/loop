@@ -1,4 +1,4 @@
-import { forwardRef, type ButtonHTMLAttributes } from 'react'
+import { type ComponentProps, forwardRef } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 import { twMerge } from 'tailwind-merge'
 import { Loader2, type LucideIcon } from 'lucide-react'
@@ -9,6 +9,11 @@ const buttonVariants = tv({
     'disabled:cursor-not-allowed'
   ),
   variants: {
+    shape: {
+      regular: '',
+      icon: 'p-1',
+      link: 'p-0',
+    },
     variant: {
       primary: twMerge(
         'bg-orange-500 enabled:hover:bg-orange-600',
@@ -23,45 +28,59 @@ const buttonVariants = tv({
         'disabled:bg-red-500/50'
       ),
     },
-    shape: {
-      icon: twMerge(
-        'p-1 bg-transparent enabled:hover:bg-transparent border-transparent',
-        'disabled:bg-transparent disabled:text-opacity-50 disabled:border-opacity-50'
-      ),
-    },
     size: {
-      default: 'px-4 py-2',
-      sm: 'px-3 py-1.5',
+      lg: 'text-lg',
+      md: 'text-base',
+      sm: 'text-sm',
     },
   },
   compoundVariants: [
     {
-      shape: 'icon',
-      className: 'p-1',
+      shape: 'regular',
+      size: 'lg',
+      className: 'px-4 py-2',
     },
     {
-      shape: 'icon',
+      shape: 'regular',
+      size: 'md',
+      className: 'px-3 py-1.5',
+    },
+    {
+      shape: 'regular',
+      size: 'sm',
+      className: 'px-2 py-1',
+    },
+    {
+      shape: ['icon', 'link'],
+      className: twMerge(
+        'bg-transparent enabled:hover:bg-transparent border-transparent',
+        'disabled:bg-transparent disabled:text-opacity-50 disabled:border-opacity-50'
+      ),
+    },
+    {
+      shape: ['icon', 'link'],
       variant: 'primary',
       className: 'text-orange-500 enabled:hover:text-orange-600',
     },
     {
-      shape: 'icon',
+      shape: ['icon', 'link'],
       variant: 'secondary',
       className: 'text-stone-300 enabled:hover:text-stone-400',
     },
     {
-      shape: 'icon',
+      shape: ['icon', 'link'],
       variant: 'danger',
       className: 'text-red-500 enabled:hover:text-red-600',
     },
   ],
   defaultVariants: {
+    shape: 'regular',
     variant: 'primary',
-    size: 'default',
+    size: 'md',
   },
 })
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+type ButtonProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> &
   (
     | { shape: 'icon'; icon: LucideIcon }

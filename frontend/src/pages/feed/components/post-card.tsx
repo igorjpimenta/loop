@@ -1,6 +1,7 @@
 import { Badge } from '../../../components/ui/badge'
 import { Button } from '../../../components/ui/button'
 import { Modal, ModalTrigger } from '../../../components/ui/modal'
+import { useUser } from '../../../context/user-context'
 import type { Post } from '../../../http/get-posts'
 import { deletePost } from '../../../http/delete-post'
 import { formatRelativeTime } from '../../../utils'
@@ -15,6 +16,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, onDelete }: PostCardProps) {
+  const { isAuthenticated, user } = useUser()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -37,12 +39,14 @@ export function PostCard({ post, onDelete }: PostCardProps) {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-stone-700 flex items-center justify-center">
               <span className="font-medium leading-none">
-                {post.username[0].toUpperCase()}
+                {post.user.username[0].toUpperCase()}
               </span>
             </div>
 
             <div className="flex flex-col justify-between">
-              <h3 className="font-medium text-stone-100">{post.username}</h3>
+              <h3 className="font-medium text-stone-100">
+                {post.user.username}
+              </h3>
 
               <p className="text-sm text-stone-700">
                 {formatRelativeTime(post.createdAt)}
@@ -50,16 +54,18 @@ export function PostCard({ post, onDelete }: PostCardProps) {
             </div>
           </div>
 
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <ModalTrigger asChild>
-              <Button
-                variant="secondary"
-                shape="icon"
-                icon={Trash2}
-                disabled={isDeleting}
-              />
-            </ModalTrigger>
-          </div>
+          {isAuthenticated && user?.id === post.user.id && (
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <ModalTrigger asChild>
+                <Button
+                  variant="secondary"
+                  shape="icon"
+                  icon={Trash2}
+                  disabled={isDeleting}
+                />
+              </ModalTrigger>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4">

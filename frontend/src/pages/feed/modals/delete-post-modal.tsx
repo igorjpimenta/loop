@@ -36,14 +36,13 @@ export function DeletePostModal({ onSubmit }: DeletePostModalProps) {
 
         <div className="flex items-center justify-between gap-6">
           <ModalTrigger asChild>
-            <Button variant="secondary" size="sm" className="flex-1">
+            <Button variant="secondary" className="flex-1">
               Cancel
             </Button>
           </ModalTrigger>
 
           <Button
             variant="danger"
-            size="sm"
             className="flex-1"
             onClick={handleSubmit}
             disabled={isLoading}

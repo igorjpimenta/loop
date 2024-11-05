@@ -1,13 +1,14 @@
 import { API_URL } from '../lib/config'
 import type { SnakeizeKeys } from '../types/case'
 import { camelizeObject } from '../utils'
+import type { User } from '../context/user-context'
 import type { Topic } from './get-topics'
 
 import axios from 'axios'
 
 export interface Post {
   id: string
-  username: string
+  user: User
   content: string
   image?: string
   topics: Topic[]

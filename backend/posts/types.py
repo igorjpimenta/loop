@@ -1,16 +1,18 @@
 from typing import TypedDict
 from uuid import UUID
 from posts.models import Topic
+from accounts.types import UserData
 
 
 class TopicData(TypedDict):
-    id: str
+    id: UUID
     name: str
 
 
 class PostData(TypedDict, total=False):
     id: UUID
-    username: str
+    user: UserData
+    user_id: UUID
     content: str
     image: str | None
     topics: list[TopicData]

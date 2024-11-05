@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import User
 from .storage import MediaStorage
 import uuid
 import os
@@ -24,11 +25,11 @@ def post_image_path(_, filename):
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.CharField(max_length=500)
     image = models.ImageField(
         upload_to=post_image_path,
-        storage=MediaStorage(),
+        storage=MediaStorage,
         blank=True,
         null=True,
     )

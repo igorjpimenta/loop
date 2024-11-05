@@ -47,10 +47,11 @@ export const createPostSchema = z.object({
 export type CreatePostFormData = z.infer<typeof createPostSchema>
 
 interface CreatePostProps {
+  userId: string
   onPostCreated: (post: Post) => void
 }
 
-export function CreatePost({ onPostCreated }: CreatePostProps) {
+export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [topics, setTopics] = useState<Topic[]>([])
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -110,12 +111,20 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
     try {
       setIsSubmitting(true)
 
-      const newPost = await createPost(data)
+      const newPost = await createPost({ userId, ...data })
       reset()
 
       onPostCreated(newPost)
     } catch (error) {
-      console.error('Error creating post:', error)
+      if (error instanceof Response && error.status === 401) {
+        setError('root.serverError', {
+          message: 'You must be logged in to create a post.',
+        })
+      } else {
+        setError('root.serverError', {
+          message: 'An error occurred, try again later.',
+        })
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -210,6 +219,12 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
 
         {errors.topics && (
           <p className="text-red-500 text-sm">{errors.topics.message}</p>
+        )}
+
+        {errors.root?.serverError && (
+          <p className="text-red-500 text-sm">
+            {errors.root.serverError.message}
+          </p>
         )}
       </div>
 

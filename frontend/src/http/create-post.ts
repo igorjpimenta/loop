@@ -6,12 +6,16 @@ import type { Post } from './get-posts'
 
 import axios from 'axios'
 
-export async function createPost(formData: CreatePostFormData): Promise<Post> {
+interface CreatePostProps extends CreatePostFormData {
+  userId: string
+}
+
+export async function createPost(formData: CreatePostProps): Promise<Post> {
   type CreatePostResponse = SnakeizeKeys<Post>
 
   const body = new FormData()
 
-  body.append('username', 'sarah_dev')
+  body.append('user_id', formData.userId)
   body.append('content', formData.content)
 
   for (const topic of formData.topics) {

@@ -4,9 +4,11 @@ import { CreatePost } from './sections/create-post-form'
 import { PostCard } from './components/post-card'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useUser } from '../../context/user-context'
 
 export function Feed() {
   const queryClient = useQueryClient()
+  const { user, isAuthenticated } = useUser()
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ['posts'],
@@ -40,7 +42,9 @@ export function Feed() {
       <Header />
 
       <div className="flex flex-col gap-3 max-w-2xl mx-auto px-4">
-        <CreatePost onPostCreated={handlePostCreated} />
+        {isAuthenticated && user?.id && (
+          <CreatePost userId={user.id} onPostCreated={handlePostCreated} />
+        )}
 
         {posts && posts.length > 0 ? (
           posts.map(post => (

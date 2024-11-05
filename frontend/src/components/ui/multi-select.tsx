@@ -1,12 +1,7 @@
-import React, {
-  forwardRef,
-  type HTMLAttributes,
-  type InputHTMLAttributes,
-} from 'react'
+import React, { type ComponentProps, forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-interface MultiSelectProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface MultiSelectProps extends Omit<ComponentProps<'div'>, 'onChange'> {
   onChange: (topics: string[]) => void
   value: string[]
 }
@@ -47,8 +42,7 @@ export const MultiSelectGroup = forwardRef<HTMLDivElement, MultiSelectProps>(
   }
 )
 
-interface MultiSelectItemProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface MultiSelectItemProps extends Omit<ComponentProps<'input'>, 'type'> {
   value: string
 }
 
