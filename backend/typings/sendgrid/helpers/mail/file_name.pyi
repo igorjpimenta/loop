@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class FileName:
+    def __init__(self, file_name: Optional[str] = None) -> None: ...
+
+    @property
+    def file_name(self) -> str: ...
+
+    @file_name.setter
+    def file_name(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

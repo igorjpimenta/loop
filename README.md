@@ -67,6 +67,7 @@ Sarah is a 29-year-old marketer and freelancer who values efficiency and simplic
 - Frontend: React + TypeScript + Tailwind CSS
 - Database: PostgreSQL (in Docker)
 - File Storage: Nginx (in Docker)
+- SMTP: SendGrid
 
 ## Getting Started
 
@@ -79,6 +80,7 @@ These instructions will get you a copy of the project up and running on your loc
 - [Node.js](https://nodejs.org/) 20+
 - [Docker](https://www.docker.com/get-started) 27+
 - [Docker Compose](https://docs.docker.com/compose/install/) 2.29+
+- [SendGrid](https://sendgrid.com/) account
 
 ### Installation
 
@@ -90,9 +92,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 2. **Set the environment variables**:
     ```bash
-    echo 'VITE_API_URL=http://localhost:8000
+    echo 'SECRET_KEY="your-secret-key"
+    VITE_API_URL=http://localhost:8000
+    APP_URL=http://localhost:5173
     ALLOWED_HOSTS=localhost,127.0.0.1
     CORS_ALLOWED_ORIGINS=http://localhost:5173
+    CSRF_TRUSTED_ORIGINS=http://localhost:5173
     DEBUG=True
     DB_HOST="localhost"
     DB_PORT=5432
@@ -105,7 +110,9 @@ These instructions will get you a copy of the project up and running on your loc
     NGINX_USER="your-nginx-user"
     NGINX_GROUP="your-nginx-group"
     NGINX_UID="your-nginx-uid"
-    NGINX_GID="your-nginx-gid"' > .env
+    NGINX_GID="your-nginx-gid"
+    SENDGRID_API_KEY="your-sendgrid-api-key"
+    SENDGRID_FROM_EMAIL="your_verified_sendgrid_email@example.com"' > .env
     ```
 
 3. **Start the PostgreSQL database using Docker**:

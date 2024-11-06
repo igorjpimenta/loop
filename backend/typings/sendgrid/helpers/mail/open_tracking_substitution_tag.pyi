@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class OpenTrackingSubstitutionTag:
+    def __init__(self, substitution_tag: Optional[str] = None) -> None: ...
+
+    @property
+    def substitution_tag(self) -> str: ...
+
+    @substitution_tag.setter
+    def substitution_tag(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

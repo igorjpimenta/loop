@@ -3,6 +3,7 @@
 from decouple import Config, RepositoryEnv, Csv
 from pathlib import Path
 from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,6 +20,11 @@ CORS_ALLOWED_ORIGINS: list[str] = env(
     default=[]
 )
 CORS_ALLOW_CREDENTIALS = True
+
+APP_URL: str = env('APP_URL', cast=str)
+
+SENDGRID_API_KEY: str = env('SENDGRID_API_KEY', cast=str)
+SENDGRID_FROM_EMAIL: str = env('SENDGRID_FROM_EMAIL', cast=str)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,7 +62,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'accounts', 'emails', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class BccSettingsEmail:
+    def __init__(self, bcc_settings_email: Optional[str] = None) -> None: ...
+
+    @property
+    def bcc_settings_email(self) -> str: ...
+
+    @bcc_settings_email.setter
+    def bcc_settings_email(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

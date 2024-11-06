@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class SubscriptionText:
+    def __init__(self, subscription_text: Optional[str] = None) -> None: ...
+
+    @property
+    def subscription_text(self) -> str: ...
+
+    @subscription_text.setter
+    def subscription_text(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

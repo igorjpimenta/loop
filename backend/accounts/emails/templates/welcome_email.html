@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <title>Welcome to Loop</title>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Roboto', sans-serif;
+            background-color: #ffffff;
+            color: #0c0a09;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .content {
+            margin: 20px 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #f97316;
+            color: #fafaf9;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.875rem;
+            color: #44403c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+            <p>Hey, {{ username }}! 🎉</p>
+
+            <p>We’re excited to have you join the Loop community. Stay connected, share your thoughts, and discover trending topics all in one place.</p>
+
+            <p>Get ready to loop into conversations that matter to you.</p>
+
+            <a href="https://{{ domain }}/" class="button">Start exploring</a>
+        </div>
+
+        <div class="footer">
+            <p>Need help or have questions? Reach out to us anytime.</p>
+
+            <p>&copy; 2024 Loop. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class TemplateId:
+    def __init__(self, template_id: Optional[str] = None) -> None: ...
+
+    @property
+    def template_id(self) -> str: ...
+
+    @template_id.setter
+    def template_id(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

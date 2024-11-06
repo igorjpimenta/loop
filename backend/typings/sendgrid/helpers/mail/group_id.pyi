@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class GroupId:
+    def __init__(self, group_id: Optional[int] = None) -> None: ...
+
+    @property
+    def group_id(self) -> int: ...
+
+    @group_id.setter
+    def group_id(self, value: int) -> None: ...
+
+    def get(self) -> int: ...

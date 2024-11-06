@@ -1,0 +1,13 @@
+from typing import Optional
+
+
+class Category:
+    def __init__(self, name: Optional[str] = None) -> None: ...
+
+    @property
+    def name(self) -> str: ...
+
+    @name.setter
+    def name(self, value: str) -> None: ...
+
+    def get(self) -> str: ...

@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from .models import User
 from .serializers import UserSerializer, UserLoginSerializer
+from .emails.email_service import send_welcome_email
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,6 +28,7 @@ class UserRegistrationViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)
+            send_welcome_email(user.email, user.username)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
