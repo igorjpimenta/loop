@@ -1,4 +1,3 @@
-import { API_URL } from '../lib/config'
 import type { CreatePostFormData } from '../pages/feed/sections/create-post-form'
 import type { SnakeizeKeys } from '../types/case'
 import { camelizeObject } from '../utils'
@@ -26,15 +25,11 @@ export async function createPost(formData: CreatePostProps): Promise<Post> {
     body.append('image', formData.image)
   }
 
-  const { data } = await axios.post<CreatePostResponse>(
-    `${API_URL}/api/posts/`,
-    body,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  )
+  const { data } = await axios.post<CreatePostResponse>('/api/posts/', body, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
 
   const post = camelizeObject(data)
 

@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.password_validation import validate_password
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 User = get_user_model()
@@ -29,27 +28,37 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class CustomTokenObtainPairSerializer(serializers.Serializer):
+class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        write_only=True
+    )
 
     def validate(self, attrs):
-        from django.contrib.auth import authenticate
+        username = attrs.get('username', None)
+        password = attrs.get('password', None)
 
-        user = authenticate(
-            username=attrs['username'],
-            password=attrs['password']
-        )
+        if username and password:
+            user = authenticate(
+                request=self.context.get('request'),
+                username=username,
+                password=password
+            )
 
-        if not user:
-            raise serializers.ValidationError('Invalid username or password.')
+            if not user:
+                raise serializers.ValidationError(
+                    'Invalid username or password.'
+                )
 
-        refresh = RefreshToken.for_user(user)
+            if not user.is_active:
+                raise serializers.ValidationError('User account is disabled.')
 
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.get('access')),
-            'id': str(user.pk),
-            'username': user.username,
-            'email': user.email,
-        }
+        else:
+            raise serializers.ValidationError(
+                'Must include "username" and "password".'
+            )
+
+        attrs['user'] = user
+
+        return attrs

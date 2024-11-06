@@ -18,6 +18,7 @@ CORS_ALLOWED_ORIGINS: list[str] = env(
     cast=Csv(),
     default=[]
 )
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +46,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
@@ -111,6 +113,20 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS: list[str] = env(
+    'CSRF_TRUSTED_ORIGINS',
+    cast=Csv(),
+    default=[]
+)
 
 
 # Internationalization

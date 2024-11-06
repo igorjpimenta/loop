@@ -1,8 +1,6 @@
 import { registerUser, type RegisterUserProps } from '../http/register-user'
-import {
-  getAuthToken,
-  type GetAuthTokenCredentials,
-} from '../http/get-auth-token'
+import { logUserIn, type LogUserInCredentials } from '../http/log-user-in'
+import { logUserOut } from '../http/log-user-out'
 
 import { createContext, useContext, useState } from 'react'
 
@@ -12,16 +10,11 @@ export interface User {
   email: string
 }
 
-export interface AuthenticatedUser extends Omit<User, 'email'> {
-  access: string
-  refresh: string
-}
-
 interface UserContextType {
-  user: AuthenticatedUser | null
-  setUser: (user: AuthenticatedUser | null) => void
+  user: User | null
+  setUser: (user: User | null) => void
   signup: (credentials: RegisterUserProps) => Promise<void>
-  login: (credentials: GetAuthTokenCredentials) => Promise<void>
+  login: (credentials: LogUserInCredentials) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
 }
@@ -33,7 +26,7 @@ const USER_STORAGE_KEY = '@Loop:user'
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<AuthenticatedUser | null>(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem(USER_STORAGE_KEY)
     return storedUser ? JSON.parse(storedUser) : null
   })
@@ -44,13 +37,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
   }
 
-  const login = async (credentials: GetAuthTokenCredentials) => {
-    const userData = await getAuthToken(credentials)
+  const login = async (credentials: LogUserInCredentials) => {
+    const userData = await logUserIn(credentials)
     setUser(userData)
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await logUserOut()
     setUser(null)
     localStorage.removeItem(USER_STORAGE_KEY)
   }
@@ -72,5 +66,6 @@ export const useUser = () => {
   if (!context) {
     throw new Error('useUser must be used within a UserProvider')
   }
+
   return context
 }
