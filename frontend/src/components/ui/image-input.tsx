@@ -4,6 +4,13 @@ import { mergeRefs } from '../../utils'
 import { type ComponentProps, forwardRef, useRef } from 'react'
 import { ImagePlus } from 'lucide-react'
 
+export const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+]
+
 interface ImageInputProps extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (file: File) => void
 }
@@ -27,7 +34,9 @@ export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
 
           <input
             type="file"
-            accept="image/*"
+            accept={ACCEPTED_IMAGE_TYPES.map(
+              type => `.${type.split('/')[1]}`
+            ).join(', ')}
             onChange={e => {
               const file = e.target.files?.[0] ?? null
 

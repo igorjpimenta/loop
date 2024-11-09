@@ -6,7 +6,7 @@ import {
 } from '../../../components/ui/modal'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import type { LogUserInCredentials } from '../../../http/log-user-in'
+import type { LoginCredentials } from '../../../http/users/login'
 
 import { useState } from 'react'
 import { z } from 'zod'
@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 
 interface LoginModalProps {
-  onLogin: (data: LogUserInCredentials) => Promise<void>
+  onLogin: (data: LoginCredentials) => Promise<void>
 }
 
 const loginSchema = z.object({

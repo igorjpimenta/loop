@@ -16,14 +16,14 @@ export function Header() {
   }
 
   const [openModal, setOpenModal] = useState<ModalType>(ModalType.NONE)
-  const { isAuthenticated, signup, login, logout } = useUser()
+  const { isAuthenticated, handleSignup, handleLogin, handleLogout } = useUser()
 
   return (
     <Modal
       open={openModal !== ModalType.NONE}
       onOpenChange={() => setOpenModal(ModalType.NONE)}
     >
-      <header className="flex flex-col sticky top-0 bg-stone-950">
+      <header className="flex flex-col sticky top-0 bg-stone-950 z-40">
         <div className="flex items-center justify-between gap-2 py-2 px-10">
           <div className="flex items-center justify-start gap-2 text-orange-500">
             <Repeat2 className="size-7" />
@@ -37,7 +37,7 @@ export function Header() {
                 shape="link"
                 variant="secondary"
                 size="sm"
-                onClick={logout}
+                onClick={handleLogout}
               >
                 Logout
               </Button>
@@ -73,7 +73,7 @@ export function Header() {
       {openModal === ModalType.LOGIN && (
         <LoginModal
           onLogin={async data => {
-            await login(data)
+            await handleLogin(data)
             setOpenModal(ModalType.NONE)
           }}
         />
@@ -82,7 +82,7 @@ export function Header() {
       {openModal === ModalType.SIGNUP && (
         <SignupModal
           onSignup={async data => {
-            await signup(data)
+            await handleSignup(data)
             setOpenModal(ModalType.NONE)
           }}
         />

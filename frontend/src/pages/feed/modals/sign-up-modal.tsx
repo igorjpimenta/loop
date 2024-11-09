@@ -6,7 +6,7 @@ import {
 } from '../../../components/ui/modal'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import type { RegisterUserProps } from '../../../http/register-user'
+import type { RegisterProps } from '../../../http/users/register'
 
 import { useState } from 'react'
 import { z } from 'zod'
@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 
 interface SignupModalProps {
-  onSignup: (data: RegisterUserProps) => Promise<void>
+  onSignup: (data: RegisterProps) => Promise<void>
 }
 
 const signupSchema = z.object({

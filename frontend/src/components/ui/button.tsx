@@ -88,8 +88,13 @@ type ButtonProps = ComponentProps<'button'> &
         icon?: LucideIcon
         children: React.ReactNode
       }
+    | {
+        icon: LucideIcon
+        children?: React.ReactNode
+      }
   ) & {
     isLoading?: boolean
+    filled?: boolean
   }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -97,6 +102,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       children,
+      filled,
       shape,
       variant,
       size,
@@ -113,7 +119,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={forwardedRef}
         {...props}
       >
-        {Icon && !isLoading && <Icon className="size-5" />}
+        {Icon && !isLoading && (
+          <Icon className={twMerge('size-5', filled && 'fill-current')} />
+        )}
         {isLoading && <Loader2 className="size-5 animate-spin" />}
 
         {children}

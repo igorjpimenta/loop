@@ -2,11 +2,34 @@ import { mergeRefs } from '../../utils'
 
 import { type ComponentProps, forwardRef, useLayoutEffect, useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { tv, type VariantProps } from 'tailwind-variants'
 
-type TextareaProps = ComponentProps<'textarea'>
+const textareaVariants = tv({
+  base: 'w-full text-stone-300 placeholder:text-stone-500 px-4 py-3 appearance-none resize-none outline-none',
+  variants: {
+    variant: {
+      default: twMerge(
+        'bg-stone-900 border border-stone-800 rounded-lg overflow-hidden',
+        'focus-visible:border-orange-500 focus-visible:ring-4 ring-orange-500/10'
+      ),
+      transparent: 'bg-transparent rounded-none overflow-y-auto',
+    },
+    height: {
+      default: 'min-h-24',
+      sm: 'min-h-6',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    height: 'default',
+  },
+})
+
+type TextareaProps = ComponentProps<'textarea'> &
+  VariantProps<typeof textareaVariants>
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, height, variant, ...props }, forwardedRef) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     useLayoutEffect(() => {
@@ -28,10 +51,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <textarea
         ref={mergeRefs(textareaRef, forwardedRef)}
-        className={twMerge(
-          'w-full min-h-24 text-stone-300 placeholder:text-stone-500 p-4 rounded appearance-none resize-none outline-none overflow-y-auto',
-          className
-        )}
+        className={twMerge(textareaVariants({ variant, height }), className)}
+        rows={1}
         {...props}
       />
     )

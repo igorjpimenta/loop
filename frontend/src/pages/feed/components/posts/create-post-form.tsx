@@ -1,29 +1,27 @@
 import {
   MultiSelectGroup,
   MultiSelectItem,
-} from '../../../components/ui/multi-select'
-import { Badge } from '../../../components/ui/badge'
-import { ImageInput } from '../../../components/ui/image-input'
-import { Button } from '../../../components/ui/button'
-import { Textarea } from '../../../components/ui/textarea'
-import { mergeRefs } from '../../../utils'
-import { getTopics, type Topic } from '../../../http/get-topics'
-import { createPost } from '../../../http/create-post'
-import type { Post } from '../../../http/get-posts'
+} from '../../../../components/ui/multi-select'
+import { Badge } from '../../../../components/ui/badge'
+import {
+  ACCEPTED_IMAGE_TYPES,
+  ImageInput,
+} from '../../../../components/ui/image-input'
+import { ImagePreview } from '../../../../components/ui/image-preview'
+import { Button } from '../../../../components/ui/button'
+import { Textarea } from '../../../../components/ui/textarea'
+import { mergeRefs } from '../../../../utils'
+import { getTopics, type Topic } from '../../../../http/posts/get-topics'
+import { createPost } from '../../../../http/posts/create-post'
+import type { Post } from '../../../../http/posts/get-posts'
 
 import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SendHorizonal, Plus, Minus, Trash2 } from 'lucide-react'
+import { SendHorizonal, Plus, Minus } from 'lucide-react'
 import { z } from 'zod'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]
 
 const createPostSchema = z.object({
   content: z
@@ -92,7 +90,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
     if (!success) {
       const errorMessage = error.errors.map(e => e.message).join(', ')
 
-      setError('image', { type: 'manual', message: errorMessage })
+      setError('image', { message: errorMessage })
       return null
     }
 
@@ -144,7 +142,8 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
               <Textarea
                 {...field}
                 placeholder="What's on your mind?"
-                className="bg-transparent p-1"
+                className="p-1"
+                variant="transparent"
               />
 
               {errors.content && (
@@ -168,25 +167,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
         />
       </div>
 
-      {image && (
-        <div className="flex items-center justify-start pt-0">
-          <div className="relative w-fit">
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Preview"
-              className="max-w-44 max-h-44 rounded-lg object-cover"
-            />
-
-            <Button
-              onClick={handleImageDelete}
-              variant="secondary"
-              shape="icon"
-              icon={Trash2}
-              className="absolute top-1 right-1 enabled:hover:text-red-500"
-            />
-          </div>
-        </div>
-      )}
+      <ImagePreview image={image} onDelete={handleImageDelete} />
 
       <div className="flex flex-col gap-1">
         <Controller
@@ -237,9 +218,6 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
               <ImageInput
                 ref={mergeRefs(imageInputRef, field.ref)}
                 name={field.name}
-                accept={ACCEPTED_IMAGE_TYPES.map(
-                  type => `.${type.split('/')[1]}`
-                ).join(', ')}
                 onChange={file => field.onChange(handleImageChange(file))}
                 onBlur={field.onBlur}
                 disabled={!!field.value || isSubmitting}

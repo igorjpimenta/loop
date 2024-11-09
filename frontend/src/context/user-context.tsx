@@ -1,6 +1,6 @@
-import { registerUser, type RegisterUserProps } from '../http/register-user'
-import { logUserIn, type LogUserInCredentials } from '../http/log-user-in'
-import { logUserOut } from '../http/log-user-out'
+import { register, type RegisterProps } from '../http/users/register'
+import { login, type LoginCredentials } from '../http/users/login'
+import { logout } from '../http/users/logout'
 
 import { createContext, useContext, useState } from 'react'
 
@@ -13,9 +13,9 @@ export interface User {
 interface UserContextType {
   user: User | null
   setUser: (user: User | null) => void
-  signup: (credentials: RegisterUserProps) => Promise<void>
-  login: (credentials: LogUserInCredentials) => Promise<void>
-  logout: () => void
+  handleSignup: (credentials: RegisterProps) => Promise<void>
+  handleLogin: (credentials: LoginCredentials) => Promise<void>
+  handleLogout: () => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -31,20 +31,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     return storedUser ? JSON.parse(storedUser) : null
   })
 
-  const signup = async (data: RegisterUserProps) => {
-    const userData = await registerUser(data)
+  const handleSignup = async (data: RegisterProps) => {
+    const userData = await register(data)
     setUser(userData)
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
   }
 
-  const login = async (credentials: LogUserInCredentials) => {
-    const userData = await logUserIn(credentials)
+  const handleLogin = async (credentials: LoginCredentials) => {
+    const userData = await login(credentials)
     setUser(userData)
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
   }
 
-  const logout = async () => {
-    await logUserOut()
+  const handleLogout = async () => {
+    await logout()
     setUser(null)
     localStorage.removeItem(USER_STORAGE_KEY)
   }
@@ -53,7 +53,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, signup, login, logout, isAuthenticated }}
+      value={{
+        user,
+        setUser,
+        handleSignup,
+        handleLogin,
+        handleLogout,
+        isAuthenticated,
+      }}
     >
       {children}
     </UserContext.Provider>

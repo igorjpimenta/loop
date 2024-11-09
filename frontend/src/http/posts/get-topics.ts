@@ -6,7 +6,7 @@ export interface Topic {
 }
 
 export async function getTopics(): Promise<Topic[]> {
-  const { data: topics } = await axios.get<Topic[]>('/api/topics/')
+  const { data: topics } = await axios.get<Topic[]>('/topics/')
 
   return topics
 }

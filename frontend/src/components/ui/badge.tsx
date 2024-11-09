@@ -3,7 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 import { twMerge } from 'tailwind-merge'
 
 const badgeVariants = tv({
-  base: 'px-2.5 py-0.5 border rounded-full text-sm transition-all duration-300 cursor-default select-none',
+  base: 'px-2.5 py-0.5 border rounded-full text-sm transition-all ease-in duration-300 cursor-default select-none',
   variants: {
     state: {
       filled: twMerge(
@@ -13,7 +13,7 @@ const badgeVariants = tv({
       outlined: twMerge(
         'border-dashed border-stone-700 text-stone-300',
         'data-[uniform=false]:hover:border-stone-500',
-        'data-[uniform=false]:data-[highlighted=true]:!border-orange-500 data-[uniform=false]:data-[highlighted=true]:hover:text-stone-100'
+        'data-[uniform=false]:data-[highlighted=true]:!border-orange-500 data-[uniform=false]:data-[highlighted=true]:border-solid data-[uniform=false]:data-[highlighted=true]:hover:text-stone-100'
       ),
     },
   },
