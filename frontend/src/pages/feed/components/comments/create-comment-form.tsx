@@ -4,7 +4,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   ImageInput,
 } from '../../../../components/ui/image-input'
-import { ImagePreview } from '../../../../components/ui/image-preview'
+import { Image } from '../../../../components/ui/image'
 import { createComment } from '../../../../http/post-actions/create-comment'
 import type { Comment } from '../../../../http/post-actions/get-comments'
 import { mergeRefs } from '../../../../utils'
@@ -152,7 +152,7 @@ export function CreateCommentForm({
         )}
       />
 
-      <ImagePreview image={image} onDelete={handleImageDelete} />
+      <Image src={image} kind="preview" onDelete={handleImageDelete} />
 
       {errors.root?.serverError && (
         <p className="text-red-500 text-sm">

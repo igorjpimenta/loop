@@ -1,16 +1,16 @@
 import { formatRelativeTime } from '../../../../utils'
 import { Badge } from '../../../../components/ui/badge'
 import { Button } from '../../../../components/ui/button'
-import { Modal } from '../../../../components/ui/modal'
+import { Image } from '../../../../components/ui/image'
+import { Modal, ModalTrigger } from '../../../../components/ui/modal'
 import { useUser } from '../../../../context/user-context'
 import type { Post } from '../../../../http/posts/get-posts'
 import { deletePost } from '../../../../http/posts/delete-post'
 import { DeletePostModal } from '../../modals/delete-post-modal'
+import { PostActions } from './post-actions'
 
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { PostActions } from './post-actions'
-import { ImageModal } from '../../modals/image-modal'
 
 interface PostCardProps {
   post: Post
@@ -18,14 +18,8 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, onDelete }: PostCardProps) {
-  enum ModalType {
-    NONE = 0,
-    DELETE = 1,
-    IMAGE = 2,
-  }
-
   const { isAuthenticated, user } = useUser()
-  const [openModal, setOpenModal] = useState<ModalType>(ModalType.NONE)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
@@ -42,10 +36,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
   }
 
   return (
-    <Modal
-      open={openModal !== ModalType.NONE}
-      onOpenChange={() => setOpenModal(ModalType.NONE)}
-    >
+    <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
       <article className="group flex flex-col gap-3 rounded-xl border border-stone-800 hover:border-stone-700 p-4 transition-border duration-300 overflow-hidden">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -68,13 +59,14 @@ export function PostCard({ post, onDelete }: PostCardProps) {
 
           {isAuthenticated && user?.id === post.user.id && (
             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <Button
-                onClick={() => setOpenModal(ModalType.DELETE)}
-                variant="secondary"
-                shape="icon"
-                icon={Trash2}
-                disabled={isDeleting}
-              />
+              <ModalTrigger asChild>
+                <Button
+                  variant="secondary"
+                  shape="icon"
+                  icon={Trash2}
+                  disabled={isDeleting}
+                />
+              </ModalTrigger>
             </div>
           )}
         </div>
@@ -90,16 +82,11 @@ export function PostCard({ post, onDelete }: PostCardProps) {
 
           {post.image && (
             <div className="overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setOpenModal(ModalType.IMAGE)}
-              >
-                <img
-                  src={post.image}
-                  alt="Post content"
-                  className="max-w-full max-h-[100vh] rounded-lg h-auto object-cover"
-                />
-              </button>
+              <Image
+                src={post.image}
+                title="Post content"
+                className="max-w-full max-h-[100vh] rounded-lg h-auto object-cover"
+              />
             </div>
           )}
 
@@ -107,13 +94,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
         </div>
       </article>
 
-      {openModal === ModalType.DELETE && (
-        <DeletePostModal onSubmit={handleDelete} />
-      )}
-
-      {openModal === ModalType.IMAGE && post.image && (
-        <ImageModal image={post.image} title="Post content" />
-      )}
+      {isModalOpen && <DeletePostModal onSubmit={handleDelete} />}
     </Modal>
   )
 }

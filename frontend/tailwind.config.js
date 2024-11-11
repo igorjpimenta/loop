@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.tsx', './index.html'],
   theme: {
@@ -14,14 +13,14 @@ export default {
         contentShow: {
           from: {
             opacity: '0',
-            transform: 'translate(-50%, -48%) scale(0.96)',
+            transform: 'translate(-50%, -48%) scale(0.8)',
           },
           to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
         },
       },
       animation: {
-        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
-        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        overlayShow: 'overlayShow 500ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 500ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

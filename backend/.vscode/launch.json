@@ -4,6 +4,10 @@
       {
         "name": "Launch Loop Application",
         "configurations": ["Start Docker", "Launch Server", "Launch App"]
+      },
+      {
+        "name": "Launch Loop Server",
+        "configurations": ["Start Docker", "Launch Server"]
       }
     ],
     "configurations": [

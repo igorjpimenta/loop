@@ -7,7 +7,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   ImageInput,
 } from '../../../../components/ui/image-input'
-import { ImagePreview } from '../../../../components/ui/image-preview'
+import { Image } from '../../../../components/ui/image'
 import { Button } from '../../../../components/ui/button'
 import { Textarea } from '../../../../components/ui/textarea'
 import { mergeRefs } from '../../../../utils'
@@ -167,7 +167,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
         />
       </div>
 
-      <ImagePreview image={image} onDelete={handleImageDelete} />
+      <Image src={image} kind="preview" onDelete={handleImageDelete} />
 
       <div className="flex flex-col gap-1">
         <Controller
