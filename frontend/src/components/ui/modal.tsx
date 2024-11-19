@@ -10,11 +10,13 @@ export function Modal(props: DialogPrimitive.DialogProps) {
 }
 
 export function ModalTrigger(props: DialogPrimitive.DialogTriggerProps) {
-  return <DialogPrimitive.DialogTrigger {...props} />
+  return (
+    <DialogPrimitive.DialogTrigger data-testid="modal-trigger" {...props} />
+  )
 }
 
 export function ModalClose(props: DialogPrimitive.DialogCloseProps) {
-  return <DialogPrimitive.DialogClose {...props} />
+  return <DialogPrimitive.DialogClose data-testid="close-modal" {...props} />
 }
 
 function ModalPortal(props: DialogPrimitive.DialogPortalProps) {
@@ -30,6 +32,7 @@ const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
       <DialogPrimitive.DialogOverlay
         {...props}
         ref={ref}
+        data-testid="modal-overlay"
         className={twMerge(
           'fixed inset-0 z-50 bg-black/60 data-[state=open]:animate-overlayShow',
           className

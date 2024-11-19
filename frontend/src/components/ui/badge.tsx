@@ -39,6 +39,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
+      role="note"
       data-uniform={uniform}
       data-highlighted={highlighted}
       className={twMerge(badgeVariants({ state }), className)}

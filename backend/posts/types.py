@@ -12,8 +12,6 @@ class TopicData(TypedDict):
 class PostData(TypedDict, total=False):
     id: UUID
     user: UserData
-    user_id: UUID
     content: str
     image: str | None
-    topics: list[TopicData]
-    topics_ids: list[Topic]
+    topics: list[Topic]

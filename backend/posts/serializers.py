@@ -26,15 +26,21 @@ class PostSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         write_only=True,
+        source='user',
     )
     topics = TopicSerializer(many=True, read_only=True)
     topics_ids = serializers.PrimaryKeyRelatedField(
         queryset=Topic.objects.all(),
         many=True,
-        required=False,
         write_only=True,
+        allow_empty=False,
+        source='topics',
+        error_messages={
+            'required': 'At least one topic is required.',
+            'empty': 'At least one topic is required.',
+        },
     )
-    actions = serializers.SerializerMethodField()
+    actions = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
@@ -55,10 +61,9 @@ class PostSerializer(serializers.ModelSerializer):
         Returns:
             Post: Created post instance
         """
-        user = validated_data.pop('user_id', None)
-        topics = validated_data.pop('topics_ids', [])
+        topics = validated_data.pop('topics', [])
 
-        post = Post.objects.create(**validated_data, user=user)
+        post = Post.objects.create(**validated_data)
 
         if topics:
             post.topics.set(topics)
@@ -80,14 +85,14 @@ class PostSerializer(serializers.ModelSerializer):
         Raises:
             ValidationError: If attempting to change post author
         """
-        user = validated_data.pop('user_id', None)
+        user = validated_data.pop('user', None)
 
         if user:
             raise serializers.ValidationError(
                 "A post author's cannot be changed."
             )
 
-        topics = validated_data.pop('topics_ids', [])
+        topics = validated_data.pop('topics', [])
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

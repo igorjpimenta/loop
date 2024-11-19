@@ -61,6 +61,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <ModalTrigger asChild>
                 <Button
+                  data-testid="delete-post-button"
                   variant="secondary"
                   shape="icon"
                   icon={Trash2}

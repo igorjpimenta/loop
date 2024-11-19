@@ -14,17 +14,23 @@ interface DeletePostModalProps {
 
 export function DeletePostModal({ onSubmit }: DeletePostModalProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<{ message: string } | null>(null)
 
-  const handleSubmit = async () => {
-    setIsLoading(true)
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true)
 
-    await onSubmit()
-
-    setIsLoading(false)
+      await onSubmit()
+    } catch (error) {
+      setError({ message: 'An error occurred, try again later.' })
+      console.error('Error deleting post:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <ModalContent>
+    <ModalContent data-testid="delete-post-modal">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -32,6 +38,10 @@ export function DeletePostModal({ onSubmit }: DeletePostModalProps) {
           </div>
 
           <ModalDescription>This action can't be undone.</ModalDescription>
+
+          {error && (
+            <span className="text-red-500 text-sm">{error.message}</span>
+          )}
         </div>
 
         <div className="flex items-center justify-between gap-6">
@@ -44,7 +54,7 @@ export function DeletePostModal({ onSubmit }: DeletePostModalProps) {
           <Button
             variant="danger"
             className="flex-1"
-            onClick={handleSubmit}
+            onClick={handleDelete}
             disabled={isLoading}
             isLoading={isLoading}
           >

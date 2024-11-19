@@ -10,7 +10,7 @@ import { Trash2 } from 'lucide-react'
 
 interface CommentCardProps {
   comment: Comment
-  onDelete: (commentId: string) => void
+  onDelete: () => void
 }
 
 export function CommentCard({ comment, onDelete }: CommentCardProps) {
@@ -22,7 +22,7 @@ export function CommentCard({ comment, onDelete }: CommentCardProps) {
       setIsDeleting(true)
 
       await deleteComment({ commentId: comment.id, postId: comment.postId })
-      onDelete(comment.id)
+      onDelete()
     } catch (error) {
       console.error(error)
     } finally {
@@ -52,6 +52,7 @@ export function CommentCard({ comment, onDelete }: CommentCardProps) {
 
           {isAuthenticated && user?.id === comment.user.id && (
             <Button
+              data-testid="delete-comment-button"
               variant="secondary"
               shape="icon"
               icon={Trash2}

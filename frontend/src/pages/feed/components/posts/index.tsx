@@ -31,7 +31,7 @@ export function Posts() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-pulse text-sky-500">Loading...</div>
+        <div className="animate-pulse text-stone-300">Loading...</div>
       </div>
     )
   }
@@ -43,13 +43,15 @@ export function Posts() {
       )}
 
       {posts && posts.length > 0 ? (
-        posts.map(post => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onDelete={() => handlePostDeleted(post.id)}
-          />
-        ))
+        <div data-testid="posts-list" className="flex flex-col gap-3">
+          {posts.map(post => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={() => handlePostDeleted(post.id)}
+            />
+          ))}
+        </div>
       ) : (
         <div>No posts found</div>
       )}

@@ -99,9 +99,13 @@ export function PostActions({ post }: PostActionsProps) {
   return (
     <>
       {isAuthenticated && (
-        <div className="flex justify-start items-end gap-4">
-          <Badge className="flex items-center gap-2">
+        <div
+          data-testid="post-actions"
+          className="flex justify-start items-end gap-4"
+        >
+          <Badge data-testid="votes" className="flex items-center gap-2">
             <Button
+              data-testid="upvote-button"
               className="p-0"
               onClick={handleUpvote}
               variant="secondary"
@@ -115,6 +119,7 @@ export function PostActions({ post }: PostActionsProps) {
             </span>
 
             <Button
+              data-testid="downvote-button"
               className="rotate-180 p-0"
               onClick={handleDownvote}
               variant="secondary"
@@ -126,10 +131,11 @@ export function PostActions({ post }: PostActionsProps) {
 
           <Badge className="flex items-center gap-2">
             <Button
+              data-testid="comments-button"
               className="p-0"
               onClick={handleOpenComments}
               variant="secondary"
-              shape="icon"
+              shape="link"
               icon={MessageSquare}
             >
               <span className="text-sm font-medium w-5 text-center">
@@ -140,15 +146,18 @@ export function PostActions({ post }: PostActionsProps) {
 
           <Badge className="flex items-center gap-2">
             <Button
+              data-testid="save-button"
               className="p-0"
               onClick={postActions.isSaved ? handleUnsave : handleSave}
               variant="secondary"
-              shape="icon"
+              shape="link"
               icon={Bookmark}
               filled={postActions.isSaved}
               disabled={isSaving}
             >
-              <span className="text-sm font-medium text-center">Save</span>
+              <span className="text-sm font-medium text-center">
+                {postActions.isSaved ? 'Saved' : 'Save'}
+              </span>
             </Button>
           </Badge>
         </div>

@@ -12,10 +12,10 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
+import axios from 'axios'
 
 interface LoginModalProps {
-  onLogin: (data: LoginCredentials) => Promise<void>
+  onSubmit: (data: LoginCredentials) => Promise<void>
 }
 
 const loginSchema = z.object({
@@ -27,7 +27,7 @@ const loginSchema = z.object({
     .min(8, { message: 'Invalid password.' }),
 })
 
-export function LoginModal({ onLogin }: LoginModalProps) {
+export function LoginModal({ onSubmit }: LoginModalProps) {
   const {
     control,
     handleSubmit,
@@ -44,13 +44,13 @@ export function LoginModal({ onLogin }: LoginModalProps) {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+  const handleLogin = async (data: z.infer<typeof loginSchema>) => {
     try {
       setIsLoading(true)
 
-      await onLogin(data)
+      await onSubmit(data)
     } catch (error: unknown) {
-      if (error instanceof AxiosError) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
         setError('root.serverError', { message: 'Invalid credentials.' })
       } else {
         setError('root.serverError', {
@@ -67,7 +67,10 @@ export function LoginModal({ onLogin }: LoginModalProps) {
 
   return (
     <ModalContent>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col gap-6"
+        onSubmit={handleSubmit(handleLogin)}
+      >
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <ModalTitle>Login</ModalTitle>

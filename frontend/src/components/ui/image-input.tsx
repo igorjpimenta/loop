@@ -16,7 +16,7 @@ interface ImageInputProps extends Omit<ComponentProps<'input'>, 'onChange'> {
 }
 
 export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
-  ({ onChange, ...props }, forwardedRef) => {
+  ({ className, onChange, ...props }, forwardedRef) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     return (
@@ -26,6 +26,7 @@ export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
         <div className="flex items-center gap-2">
           <Button
             onClick={() => inputRef.current?.click()}
+            className={className}
             variant="secondary"
             shape="icon"
             icon={ImagePlus}
@@ -33,6 +34,7 @@ export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
           />
 
           <input
+            data-testid="image-input"
             type="file"
             accept={ACCEPTED_IMAGE_TYPES.map(
               type => `.${type.split('/')[1]}`

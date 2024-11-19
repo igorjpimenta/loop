@@ -130,6 +130,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
 
   return (
     <form
+      data-testid="create-post-form"
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-3 bg-stone-900 rounded-xl p-3 max-h-[90vh] overflow-hidden"
     >
@@ -141,6 +142,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
             <div className="flex flex-col gap-1 overflow-hidden">
               <Textarea
                 {...field}
+                data-testid="content-textarea"
                 placeholder="What's on your mind?"
                 className="p-1"
                 variant="transparent"
@@ -174,9 +176,9 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
           control={control}
           name="topics"
           render={({ field }) => (
-            <MultiSelectGroup {...field}>
+            <MultiSelectGroup data-testid="topics-select" {...field}>
               {topics.map(({ id, name }) => (
-                <MultiSelectItem key={id} value={id}>
+                <MultiSelectItem data-testid="topic-item" key={id} value={id}>
                   <Badge
                     className="cursor-pointer select-none"
                     uniform={false}
@@ -233,6 +235,7 @@ export function CreatePost({ userId, onPostCreated }: CreatePostProps) {
         />
 
         <Button
+          data-testid="send-button"
           type="submit"
           disabled={isSubmitting}
           isLoading={isSubmitting}

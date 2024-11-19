@@ -126,6 +126,7 @@ export function CreateCommentForm({
           <div className="flex flex-col gap-1 overflow-hidden">
             <Textarea
               {...field}
+              data-testid="content-textarea"
               variant="transparent"
               height="sm"
               className="px-1 py-0"
@@ -185,6 +186,7 @@ export function CreateCommentForm({
         />
 
         <Button
+          data-testid="send-button"
           type="submit"
           disabled={isSubmitting}
           isLoading={isSubmitting}

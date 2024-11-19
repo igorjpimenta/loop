@@ -1,4 +1,4 @@
-import type { CreatePostFormData } from '../../pages/feed/sections/create-post-form'
+import type { CreatePostFormData } from '../../pages/feed/components/posts/create-post-form'
 import type { SnakeizeKeys } from '../../types/case'
 import { camelizeObject } from '../../utils'
 import type { Post } from './get-posts'

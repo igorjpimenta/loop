@@ -120,11 +120,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {Icon && !isLoading && (
-          <Icon className={twMerge('size-5', filled && 'fill-current')} />
+          <Icon
+            data-testid="standard-icon"
+            className={twMerge('size-5', filled && 'fill-current')}
+          />
         )}
-        {isLoading && <Loader2 className="size-5 animate-spin" />}
+        {isLoading && (
+          <Loader2 data-testid="loading-icon" className="size-5 animate-spin" />
+        )}
 
-        {children}
+        {shape !== 'icon' && children}
       </button>
     )
   }

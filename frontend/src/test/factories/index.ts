@@ -1,0 +1,6 @@
+export * from './data/user.factory'
+export * from './data/topic.factory'
+export * from './data/post.factory'
+export * from './data/comment.factory'
+export * from './http/http.factory'
+export { authenticatedContext, HttpStatus } from './http/factory-builder'

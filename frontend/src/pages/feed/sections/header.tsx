@@ -72,7 +72,7 @@ export function Header() {
 
       {openModal === ModalType.LOGIN && (
         <LoginModal
-          onLogin={async data => {
+          onSubmit={async data => {
             await handleLogin(data)
             setOpenModal(ModalType.NONE)
           }}
@@ -81,7 +81,7 @@ export function Header() {
 
       {openModal === ModalType.SIGNUP && (
         <SignupModal
-          onSignup={async data => {
+          onSubmit={async data => {
             await handleSignup(data)
             setOpenModal(ModalType.NONE)
           }}

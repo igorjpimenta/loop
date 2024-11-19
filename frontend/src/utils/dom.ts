@@ -5,7 +5,6 @@ export function mergeRefs<T>(...refs: LegacyRef<T>[]) {
     for (const ref of refs) {
       if (typeof ref === 'function') {
         ref(element)
-        return
       }
 
       if (ref) {

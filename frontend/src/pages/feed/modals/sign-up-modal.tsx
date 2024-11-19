@@ -12,10 +12,10 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
+import axios from 'axios'
 
 interface SignupModalProps {
-  onSignup: (data: RegisterProps) => Promise<void>
+  onSubmit: (data: RegisterProps) => Promise<void>
 }
 
 const signupSchema = z.object({
@@ -30,7 +30,7 @@ const signupSchema = z.object({
     .email({ message: 'Invalid email.' }),
 })
 
-export function SignupModal({ onSignup }: SignupModalProps) {
+export function SignupModal({ onSubmit }: SignupModalProps) {
   const {
     control,
     handleSubmit,
@@ -48,14 +48,14 @@ export function SignupModal({ onSignup }: SignupModalProps) {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = async (data: z.infer<typeof signupSchema>) => {
+  const handleSignup = async (data: z.infer<typeof signupSchema>) => {
     try {
       setIsLoading(true)
 
-      await onSignup(data)
+      await onSubmit(data)
       reset()
     } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response?.status === 400) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
         const { email, username, password } = error.response.data
 
         if (email) {
@@ -74,7 +74,6 @@ export function SignupModal({ onSignup }: SignupModalProps) {
           message: 'An error occurred, try again later.',
         })
       }
-      console.error('Error creating an account:', error)
     } finally {
       setIsLoading(false)
     }
@@ -82,7 +81,10 @@ export function SignupModal({ onSignup }: SignupModalProps) {
 
   return (
     <ModalContent>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col gap-6"
+        onSubmit={handleSubmit(handleSignup)}
+      >
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <ModalTitle>Sign up</ModalTitle>

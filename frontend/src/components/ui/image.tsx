@@ -187,10 +187,12 @@ export function FullScreenImage({ src, onOverlayClick }: FullScreenImageProps) {
   }, [isZoomed, handleMove, handleDragEnd])
   return (
     <div
+      data-testid="fullscreen-overlay"
       onMouseDown={handleOverlayClick}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-overlayShow"
     >
       <div
+        data-testid="fullscreen-container"
         ref={containerRef}
         onMouseDown={handleImageClick}
         className={twMerge(
@@ -199,6 +201,7 @@ export function FullScreenImage({ src, onOverlayClick }: FullScreenImageProps) {
         )}
       >
         <img
+          data-testid="fullscreen-image"
           ref={imageRef}
           src={src}
           aria-hidden={true}
