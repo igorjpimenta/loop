@@ -1,11 +1,14 @@
 from rest_framework import viewsets, status
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import (
+    SessionAuthentication,
+    TokenAuthentication
+)
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import QuerySet
-from accounts.permissions import IsAdminUserOrReadOnly, IsOwnerOrReadOnly
+from accounts.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from accounts.models import User
 from .models import Post, Topic, PostComment
 from .serializers import PostSerializer, TopicSerializer, PostCommentSerializer
@@ -19,8 +22,8 @@ class TopicViewSet(viewsets.ModelViewSet):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = [IsAdminUserOrReadOnly]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class PostViewSet(PostActionsMixin, viewsets.ModelViewSet):
@@ -125,10 +128,22 @@ class PostViewSet(PostActionsMixin, viewsets.ModelViewSet):
         user: User = request.user
 
         if request.method == 'POST':
-            post.saved_by.add(user)
+            if user not in post.saved_by.all():
+                post.saved_by.add(user)
+            else:
+                return Response(
+                    {'details': 'Post already saved'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         if request.method == 'DELETE':
-            post.saved_by.remove(user)
+            if user in post.saved_by.all():
+                post.saved_by.remove(user)
+            else:
+                return Response(
+                    {'details': 'Post not saved'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         return Response(status=status.HTTP_200_OK)
 

@@ -5,7 +5,7 @@ from rest_framework import views, viewsets, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.request import Request
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsSelfOrReadOnly
 from .models import User
 from .serializers import UserSerializer, UserLoginSerializer
 from .emails.email_service import send_welcome_email
@@ -19,7 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsSelfOrReadOnly]
 
 
 class UserRegistrationViewSet(viewsets.ViewSet):

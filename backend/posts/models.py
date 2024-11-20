@@ -1,4 +1,7 @@
-from django.db import models
+from django.db import models, transaction
+from django.core.exceptions import ValidationError
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 from accounts.models import User
 from .storage import MediaStorage
 import uuid
@@ -10,7 +13,7 @@ class Topic(models.Model):
     Topic model for categorizing posts.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -133,3 +136,27 @@ class PostComment(models.Model):
     class Meta:
         ordering = ['-created_at']
         db_table = 'post_comments'
+
+
+@receiver(m2m_changed, sender=Post.upvoted_by.through)
+def validate_upvote(_, instance, action, pk_set, **kwargs):
+    """Prevent upvoting if user has downvoted."""
+    if action == "pre_add":
+        # Check if any of the users being added have already downvoted
+        with transaction.atomic():
+            if instance.downvoted_by.filter(pk__in=pk_set).exists():
+                raise ValidationError(
+                    "Cannot upvote a post you have already downvoted"
+                )
+
+
+@receiver(m2m_changed, sender=Post.downvoted_by.through)
+def validate_downvote(_, instance, action, pk_set, **kwargs):
+    """Prevent downvoting if user has upvoted."""
+    if action == "pre_add":
+        # Check if any of the users being added have already upvoted
+        with transaction.atomic():
+            if instance.upvoted_by.filter(pk__in=pk_set).exists():
+                raise ValidationError(
+                    "Cannot downvote a post you have already upvoted"
+                )

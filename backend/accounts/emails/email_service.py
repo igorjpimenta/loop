@@ -2,9 +2,16 @@ from django.template.loader import render_to_string
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, From, Subject
 from config.settings import SENDGRID_API_KEY, SENDGRID_FROM_EMAIL, APP_URL
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def send_welcome_email(to_email, username):
+    """Send a welcome email to the user."""
+    if not username:
+        raise ValueError("Username is required")
+
     message = Mail(
         from_email=From(SENDGRID_FROM_EMAIL),
         to_emails=to_email,
@@ -21,5 +28,8 @@ def send_welcome_email(to_email, username):
 
         return response.status_code
 
+    except KeyError as e:
+        logger.error(f"Error sending email: Invalid param {e}")
+
     except Exception as e:
-        print(f"Error sending email: {e}")
+        logger.error(f"Error sending email: {e}")

@@ -26,7 +26,21 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         )
 
 
-class IsAdminUserOrReadOnly(permissions.BasePermission):
+class IsSelfOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow self-user to edit objects.
+    """
+
+    def has_object_permission(self, request, view, obj) -> bool:
+        return bool(
+            request.method in permissions.SAFE_METHODS or
+            request.user and
+            request.user.is_authenticated and
+            obj == request.user
+        )
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow admin users to edit objects.
     """

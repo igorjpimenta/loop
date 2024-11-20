@@ -87,6 +87,9 @@ DATABASES = {
         'PASSWORD': env('DB_PASSWORD', cast=str),
         'HOST': env('DB_HOST', cast=str),
         'PORT': env('DB_PORT', cast=str),
+    },
+    'test': {
+        'NAME': f'{env("DB_NAME", cast=str)}_test',
     }
 }
 
