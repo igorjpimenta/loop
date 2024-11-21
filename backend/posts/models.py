@@ -139,7 +139,7 @@ class PostComment(models.Model):
 
 
 @receiver(m2m_changed, sender=Post.upvoted_by.through)
-def validate_upvote(_, instance, action, pk_set, **kwargs):
+def validate_upvote(sender, instance, action, pk_set, **kwargs):
     """Prevent upvoting if user has downvoted."""
     if action == "pre_add":
         # Check if any of the users being added have already downvoted
@@ -151,7 +151,7 @@ def validate_upvote(_, instance, action, pk_set, **kwargs):
 
 
 @receiver(m2m_changed, sender=Post.downvoted_by.through)
-def validate_downvote(_, instance, action, pk_set, **kwargs):
+def validate_downvote(sender, instance, action, pk_set, **kwargs):
     """Prevent downvoting if user has upvoted."""
     if action == "pre_add":
         # Check if any of the users being added have already upvoted

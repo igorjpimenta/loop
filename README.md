@@ -137,7 +137,12 @@ These instructions will get you a copy of the project up and running on your loc
     python manage.py migrate
     ```
 
-7. **Install frontend dependencies**:
+7. **Generate seed data**:
+    ```bash
+    python manage.py generate_seed_data
+    ```
+
+8. **Install frontend dependencies**:
    ```bash
    cd ../frontend
    npm install
